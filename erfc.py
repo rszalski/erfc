@@ -8,7 +8,8 @@ Usage:
 
 Options:
     -h, --help          Show this screen.
-    --save-to=<path>    Path to a folder where RFC will be stored [default: rfcs].
+    --save-to=<path>    Path to a folder where RFC will be stored
+                        [default: rfcs].
 
 '''
 import sys
