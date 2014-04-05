@@ -7,7 +7,7 @@
        \/____/ \/_/\/ /\/_/    \/___/ 
                                 
                                 
-erfc
+eRFC
 ====
 
 eRFC downloads and formats RFC for easy reading on a eBook reader.
