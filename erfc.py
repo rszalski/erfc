@@ -19,9 +19,9 @@ from docopt import docopt
 from erfc.get import get_rfcs
 
 
-def main(args):
-    get_rfcs(args['<rfc_numbers>'], args['--save-to'])
+def main():
+    args = docopt(__doc__)
+    get_rfcs(args)
 
 if __name__ == '__main__':
-    args = docopt(__doc__)
-    sys.exit(main(args))
+    sys.exit(main())

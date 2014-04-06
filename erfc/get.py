@@ -27,13 +27,13 @@ def parse_rfc_numbers(numbers):
     return nums
 
 
-def get_rfcs(arg_numbers, path):
-    rfc_numbers = parse_rfc_numbers(arg_numbers)
+def get_rfcs(args):
+    rfc_numbers = parse_rfc_numbers(args['<rfc_numbers>'])
 
     for rfc_number in rfc_numbers:
         rfc_url = '{}{}.{}'.format(RFC_URL, rfc_number, RFC_FORMAT)
         r = requests.get(rfc_url)
-        write_rfc(r.text, rfc_number, path)
+        write_rfc(r.text, rfc_number, args['--save-to'])
 
 
 def write_rfc(data, number, path):
