@@ -14,6 +14,11 @@ RFC_FORMAT = 'txt'
 
 def parse_rfc_numbers(numbers):
     '''
+    Parses RFC numbers to a list of ints.
+
+    :numbers:   Valid integers or ranges of thereof passed as CLI args,
+                e.g., ['100', '101-103']
+    :return:    A list of RFC numbers, e.g., [100, 101, 102, 103]
     '''
     nums = []
 
