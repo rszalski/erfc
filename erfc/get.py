@@ -4,6 +4,7 @@
 Handles RFC fetching.
 '''
 import os
+import re
 
 import requests
 
@@ -44,10 +45,34 @@ def get_rfcs(args):
         write_rfc(r.text, rfc_number, args['--save-to'])
 
 
+def normalize_newlines(data):
+    '''
+    Removes explicit linebreaks, so that text can flow freely on an eReader.
+
+    Current approach is to define a line width threshold, above which
+    linebreaks are removed (if not preceded by a full stop) together with
+    following whitespace.
+    '''
+    # TODO Clean & Optimize.
+    # TODO Find a better heuristic.
+    width_threshold = 60
+    data = data.splitlines(True)
+    new_text = []
+
+    for line in data:
+        if len(line) > width_threshold:
+            line = re.sub(r'(?<!\.)(\n|\r\n|\r)+[\t ]*', '', line)
+
+        new_text.append(line)
+
+    return ''.join(new_text)
+
+
 def write_rfc(data, number, path):
     filename = 'rfc{}.{}'.format(number, RFC_FORMAT)
     rfc_path = os.path.join(path, filename)
     rfc_dir = os.path.dirname(rfc_path)
+    data = normalize_newlines(data)
 
     if not os.path.exists(rfc_dir):
         os.makedirs(rfc_dir)
