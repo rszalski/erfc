@@ -73,8 +73,16 @@ def postprocess_text(data):
 
 
     '''
+    # TODO: Change '-    ' to '' and '     ' to ' '
+
+    new_text = []
     
-    return ''.join(data)
+    for line in data:
+        #DAT DAZNT ŁORK! 
+        #line = re.sub(r'(?<!^)[ ]+',' ',line)
+        new_text.append(line)
+
+    return ''.join(new_text)
 
 def format_document(data):
     '''
@@ -126,7 +134,7 @@ def format_document(data):
         else:
             new_text.append(line)
     
-    new_test = postprocess_text(new_test)
+    new_test = postprocess_text(new_text)
 
     return ''.join(new_text)
     
