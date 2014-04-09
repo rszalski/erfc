@@ -73,27 +73,24 @@ def format_document(data):
     data = data.splitlines(True)
     new_text = []
 
-    # Variable useful when deleting lines
     lines_to_del = 0
 
-    # Variable storing the state of parser (ex. paragraph, enumeration,
-    # equation etc.)
+    # Parser can be in states: {'par', 'enum', 'eq'}
     state = None
 
-    # Often used regexps - compiling them should make it a bit quicker.
     re_table_of_content = re.compile(r'\.{5}?[ ]+[0-9]')
     re_page = re.compile(r'\[Page [0-9]+\]')
-    re_start_of_paragraph = re.compile(r'^[ ]{3,9}[A-Z][a-z]|^[ ]{3,9}A[ ]|^[ ]{3,9}PNG')
+    re_start_of_paragraph = \
+        re.compile(r'^[ ]{3,9}[A-Z][a-z]|^[ ]{3,9}A[ ]|^[ ]{3,9}PNG')
 
     for line in data:
         if lines_to_del:
             lines_to_del -= 1
-            continue
         elif line[0] == '\n':
             state = None
             new_text.append(line)
         elif state:
-            if state == 'paragraph':
+            if state == 'par':
                 line = re.sub(r'\n|\r\n|\r*', '', line)
                 new_text.append(line)
         elif re_table_of_content.search(line):
@@ -101,7 +98,7 @@ def format_document(data):
         elif re_page.search(line):
             lines_to_del = 3
         elif re_start_of_paragraph.search(line):
-            state = 'paragraph'
+            state = 'par'
             line = re.sub(r'\n|\r\n|\r*', '', line)
             new_text.append(line)
         else:
