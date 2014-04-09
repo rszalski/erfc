@@ -102,7 +102,7 @@ def format_document(data):
         else:
             new_text.append(line)
 
-    new_test = postprocess_text(new_text)
+    new_text = postprocess_text(new_text)
 
     return ''.join(new_text)
 
