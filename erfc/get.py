@@ -45,20 +45,18 @@ def get_rfcs(args):
         write_rfc(r.text, rfc_number, args['--save-to'])
 
 
-def postprocess_text(data):
+def postprocess_text(par):
     '''
-    Doing the postprocessing such as removing multiple spaces and so on.
-
-
+    Changes more than 2 spaces to a single space in paragraphs.
     '''
-    # TODO: Change '-    ' to '' and '     ' to ' '
+    # TODO Change name to postprocess_paragraph or a better name
+    # TODO Explain pattern
+    # TODO Handle hyphens/minuses separately (1 - 2 vs. 1-2 etc.)
+    pattern = re.compile(r'(\b|[.!?-])[ ]{2,}\b')
 
-    new_text = []
-
-    for line in data:
-        # DAT DAZNT ŁORK!
-        # line = re.sub(r'(?<!^)[ ]+',' ',line)
-        new_text.append(line)
+    # \g<1> preserves a terminating char (.|?|! etc.) that would otherwise be
+    # changed to a single space.
+    new_text = [re.sub(pattern, '\g<1> ', line) for line in par]
 
     return ''.join(new_text)
 
