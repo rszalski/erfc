@@ -107,7 +107,7 @@ def format_document(data):
 
     new_test = postprocess_text(new_text)
 
-    return ''.join(new_text)
+    return ''.join(new_test)
 
 
 def write_rfc(data, number, path):
