@@ -48,6 +48,8 @@ def get_rfcs(args):
 def postprocess_text(par):
     '''
     Changes more than 2 spaces to a single space in paragraphs.
+
+    :par:   A paragraph of text as a single string.
     '''
     # TODO Change name to postprocess_paragraph or a better name
     # TODO Explain pattern
@@ -56,9 +58,7 @@ def postprocess_text(par):
 
     # \g<1> preserves a terminating char (.|?|! etc.) that would otherwise be
     # changed to a single space.
-    new_text = [re.sub(pattern, '\g<1> ', line) for line in par]
-
-    return ''.join(new_text)
+    return re.sub(pattern, '\g<1> ', par)
 
 
 def format_document(data):
@@ -105,9 +105,8 @@ def format_document(data):
         else:
             new_text.append(line)
 
-    new_test = postprocess_text(new_text)
-
-    return ''.join(new_test)
+    # Postprocess acts on a whole string
+    return postprocess_text(''.join(new_text))
 
 
 def write_rfc(data, number, path):
