@@ -81,7 +81,9 @@ def format_document(data):
     # Often used regexps - compiling them should make it a bit quicker.
     re_table_of_content = re.compile(r'\.{5}?[ ]+[0-9]')
     re_page = re.compile(r'\[Page [0-9]+\]')
-    re_start_of_paragraph = re.compile(r'^[ ]{3,9}[A-Z][a-z]|^[ ]{3,9}A[ ]|^[ ]{3,9}PNG')
+    re_start_of_paragraph = re.compile(r'''
+        ^[ ]{3,9}[A-Z][a-z]|^[ ]{3,9}A[ ]|^[ ]{3,9}PNG
+    ''')
 
     for line in data:
         if lines_to_del:
