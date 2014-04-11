@@ -54,7 +54,7 @@ def postprocess_text(par):
     # TODO Change name to postprocess_paragraph or a better name
     # TODO Explain pattern
     # TODO Handle hyphens/minuses separately (1 - 2 vs. 1-2 etc.)
-    pattern = re.compile(r'(\b|[.!?-])[ ]{2,}\b')
+    pattern = re.compile(r'(\b|[,.!?-])[ ]{2,}\b')
 
     # \g<1> preserves a terminating char (.|?|! etc.) that would otherwise be
     # changed to a single space.
