@@ -4,7 +4,7 @@
 '''
 import pytest
 
-from erfc.get import parse_rfc_numbers
+from erfc.get import parse_rfc_numbers, postprocess_text
 
 
 class TestParseRfcNumbers():
@@ -19,3 +19,15 @@ class TestParseRfcNumbers():
         rfc_numbers = [100, 101, 102, 103, 104, 105, 110, 111, 112]
 
         assert rfc_numbers == parse_rfc_numbers(arg_numbers)
+
+
+class TestPostprocessText():
+    def test_spaces(self):
+        pre = ('This document!    describes PNG (Portable Network Graphics),  '
+               'an   extensible file format.  for the  storage?  of raster'
+               'images.')
+        post = ('This document! describes PNG (Portable Network Graphics), '
+                'an extensible file format. for the storage? of raster'
+                'images.')
+
+        assert postprocess_text(pre) == post
