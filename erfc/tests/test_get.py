@@ -4,7 +4,7 @@
 '''
 import pytest
 
-from erfc.get import parse_rfc_numbers, postprocess_text
+from erfc.get import parse_rfc_numbers, postprocess_paragraph
 
 
 class TestParseRfcNumbers():
@@ -30,7 +30,7 @@ class TestPostprocessText():
                 'an extensible file format. for the storage? of raster'
                 'images.')
 
-        assert postprocess_text(pre) == post
+        assert postprocess_paragraph(pre) == post
 
     def test_hyphens(self):
         pre = 'some text -    some other text'
@@ -38,5 +38,5 @@ class TestPostprocessText():
         pre_range = '1-    2'
         post_range = '1-2'
 
-        assert postprocess_text(pre) == post
-        assert postprocess_text(pre_range) == post_range
+        assert postprocess_paragraph(pre) == post
+        assert postprocess_paragraph(pre_range) == post_range

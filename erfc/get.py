@@ -45,13 +45,12 @@ def get_rfcs(args):
         write_rfc(r.text, rfc_number, args['--save-to'])
 
 
-def postprocess_text(par):
+def postprocess_paragraph(par):
     '''
     Changes more than 2 spaces to a single space in paragraphs.
 
     :par:   A paragraph of text as a single string.
     '''
-    # TODO Change name to postprocess_paragraph or a better name
     # In case of whitespace before hyphen, we preserve that for symmetry.
     hyphen_pattern = re.compile(r'([ ]*)(-)[ ]+')
     par = re.sub(hyphen_pattern, '\g<1>\g<2>\g<1>', par)
@@ -110,7 +109,7 @@ def format_document(data):
             new_text.append(line)
 
     # Postprocess acts on a whole string
-    return postprocess_text(''.join(new_text))
+    return postprocess_paragraph(''.join(new_text))
 
 
 def write_rfc(data, number, path):
