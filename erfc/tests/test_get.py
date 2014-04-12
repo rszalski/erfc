@@ -31,3 +31,12 @@ class TestPostprocessText():
                 'images.')
 
         assert postprocess_text(pre) == post
+
+    def test_hyphens(self):
+        pre = 'some text -    some other text'
+        post = 'some text - some other text'
+        pre_range = '1-    2'
+        post_range = '1-2'
+
+        assert postprocess_text(pre) == post
+        assert postprocess_text(pre_range) == post_range

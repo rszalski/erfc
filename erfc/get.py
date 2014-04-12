@@ -52,9 +52,11 @@ def postprocess_text(par):
     :par:   A paragraph of text as a single string.
     '''
     # TODO Change name to postprocess_paragraph or a better name
+    # In case of whitespace before hyphen, we preserve that for symmetry.
+    hyphen_pattern = re.compile(r'([ ]*)(-)[ ]+')
+    par = re.sub(hyphen_pattern, '\g<1>\g<2>\g<1>', par)
     # TODO Explain pattern
-    # TODO Handle hyphens/minuses separately (1 - 2 vs. 1-2 etc.)
-    pattern = re.compile(r'(\b|[,.!?-])[ ]{2,}\b')
+    pattern = re.compile(r'(\b|[,.!?])[ ]{2,}\b')
 
     # \g<1> preserves a terminating char (.|?|! etc.) that would otherwise be
     # changed to a single space.
