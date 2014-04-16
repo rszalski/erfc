@@ -72,23 +72,18 @@ def postprocess_paragraph(par):
 
 def format_document(data):
     '''
-    Tries to analyze type of each line and make a more aware decisions.
-
-    This approach tries analyze each line of file and choose if removing
-    linebreaks is reasonable.
+    Decides whether removing linebreaks at a given line is reasonable.
     '''
     data = data.splitlines(True)
     new_text = []
 
-    # Variable useful when deleting lines
     lines_to_del = 0
 
-    # Variable storing the state of parser (ex. paragraph, enumeration,
+    # Variable storing the state of parser (e.g., paragraph, enumeration,
     # equation etc.)
     state = None
 
-    # Often used regexps - compiling them should make it a bit quicker.
-    re_table_of_content = re.compile(r'\.{5}?[ ]+[0-9]')
+    re_toc = re.compile(r'\.{5}?[ ]+[0-9]')
     re_page = re.compile(r'\[Page [0-9]+\]')
     re_start_of_paragraph = re.compile(r'''
         ^[ ]{3,9}[A-Z][a-z]|^[ ]{3,9}A[ ]|^[ ]{3,9}PNG
@@ -105,7 +100,7 @@ def format_document(data):
             if state == 'paragraph':
                 line = re.sub(r'\n|\r\n|\r*', '', line)
                 new_text.append(line)
-        elif re_table_of_content.search(line):
+        elif re_toc.search(line):
             new_text.append(line)
         elif re_page.search(line):
             lines_to_del = 3
@@ -131,4 +126,4 @@ def write_rfc(data, number, path):
 
     with open(rfc_path, 'w') as rfc_file:
         rfc_file.write(data)
-        print('\tWritten RFC in {}.'.format(rfc_path))
+        print('\tSaved RFC in {}.'.format(rfc_path))

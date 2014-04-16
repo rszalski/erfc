@@ -1,15 +1,15 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-eRFC
+eRFC downloads and formats plain-text RFCs to fit eReaders nicely.
 
 Usage:
     erfc get <rfc_numbers>... [--save-to=<path>]
 
 Options:
-    -h, --help          Show this screen.
-    --save-to=<path>    Path to a folder where RFC will be stored
-                        [default: rfcs].
+    -h, --help              Show this screen.
+    -s, --save-to=<path>    Path to a folder where RFC will be stored
+                            [default: rfcs].
 
 '''
 import sys

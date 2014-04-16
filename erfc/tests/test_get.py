@@ -23,6 +23,10 @@ class TestParseRfcNumbers():
 
 class TestPostprocessText():
     def test_spaces(self):
+        '''
+        Given a string with redundant whitespace, removes it while preserving
+        sentence terminating symbols (?!.).
+        '''
         pre = ('This document!    describes PNG (Portable Network Graphics),  '
                'an   extensible file format.  for the  storage?  of raster'
                'images.')
@@ -33,6 +37,10 @@ class TestPostprocessText():
         assert postprocess_paragraph(pre) == post
 
     def test_hyphens(self):
+        '''
+        Given a string with redundant whitespace after hyphens, removes it
+        to match space before hyphen (if any).
+        '''
         pre = 'some text -    some other text'
         post = 'some text - some other text'
         pre_range = '1-    2'
