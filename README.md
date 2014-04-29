@@ -10,7 +10,7 @@
 eRFC
 ====
 
-eRFC downloads and formats RFC for easy reading on a eBook reader.
+eRFC downloads and formats plain-text RFCs to fit eReaders nicely.
 
 Why?
 ---------------

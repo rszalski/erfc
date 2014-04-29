@@ -45,17 +45,26 @@ def get_rfcs(args):
         write_rfc(r.text, rfc_number, args['--save-to'])
 
 
-def postprocess_text(par):
+def postprocess_paragraph(par):
     '''
     Changes more than 2 spaces to a single space in paragraphs.
 
     :par:   A paragraph of text as a single string.
     '''
-    # TODO Change name to postprocess_paragraph or a better name
-    # TODO Explain pattern
-    # TODO Handle hyphens/minuses separately (1 - 2 vs. 1-2 etc.)
-    pattern = re.compile(r'(\b|[.!?-])[ ]{2,}\b')
+    # In case of whitespace before hyphen, we preserve that for symmetry.
+    hyphen_pattern = re.compile('''
+    ([ ]*)  # Match 0 or more space before hyphen, store in subgroup 1.
+    (-)     # Match hyphen, store in subgroup 2.
+    [ ]+    # Match redundant spaces after hyphen.
+    ''', re.VERBOSE)
+    par = re.sub(hyphen_pattern, '\g<1>\g<2>\g<1>', par)
 
+    pattern = re.compile('''
+    (\\b|[,.!?])    # Match either a word boundary or a sentence-terminating
+                    # character, store in a subgroup 1.
+    [ ]{2,}         # Match 2 or more spaces.
+    \\b             # Word boundary.
+    ''', re.VERBOSE)
     # \g<1> preserves a terminating char (.|?|! etc.) that would otherwise be
     # changed to a single space.
     return re.sub(pattern, '\g<1> ', par)
@@ -63,10 +72,7 @@ def postprocess_text(par):
 
 def format_document(data):
     '''
-    Tries to analyze type of each line and make a more aware decisions.
-
-    This approach tries analyze each line of file and choose if removing
-    linebreaks is reasonable.
+    Decides whether removing linebreaks at a given line is reasonable.
     '''
     data = data.splitlines(True)
     new_text = []
@@ -76,10 +82,11 @@ def format_document(data):
     # Parser can be in states: {'par', 'enum', 'eq'}
     state = None
 
-    re_table_of_content = re.compile(r'\.{5}?[ ]+[0-9]')
+    re_toc = re.compile(r'\.{5}?[ ]+[0-9]')
     re_page = re.compile(r'\[Page [0-9]+\]')
-    re_start_of_paragraph = \
-        re.compile(r'^[ ]{3,9}[A-Z][a-z]|^[ ]{3,9}A[ ]|^[ ]{3,9}PNG')
+    re_start_of_paragraph = re.compile(r'''
+        ^[ ]{3,9}[A-Z][a-z]|^[ ]{3,9}A[ ]|^[ ]{3,9}PNG
+    ''')
 
     for line in data:
         if lines_to_del:
@@ -91,7 +98,7 @@ def format_document(data):
             if state == 'par':
                 line = re.sub(r'\n|\r\n|\r*', '', line)
                 new_text.append(line)
-        elif re_table_of_content.search(line):
+        elif re_toc.search(line):
             new_text.append(line)
         elif re_page.search(line):
             lines_to_del = 3
@@ -103,7 +110,7 @@ def format_document(data):
             new_text.append(line)
 
     # Postprocess acts on a whole string
-    return postprocess_text(''.join(new_text))
+    return postprocess_paragraph(''.join(new_text))
 
 def write_rfc(data, number, path):
     filename = 'rfc{}.{}'.format(number, RFC_FORMAT)
@@ -116,4 +123,4 @@ def write_rfc(data, number, path):
 
     with open(rfc_path, 'w') as rfc_file:
         rfc_file.write(data)
-        print('\tWritten RFC in {}.'.format(rfc_path))
+        print('\tSaved RFC in {}.'.format(rfc_path))
