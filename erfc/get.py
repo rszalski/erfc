@@ -84,7 +84,7 @@ def format_document(data):
 
     re_toc = re.compile(r'\.{5}?[ ]+[0-9]')
     re_page = re.compile(r'\[Page [0-9]+\]')
-    re_start_of_paragraph = re.compile(r'''
+    re_start_of_paragraph = re.compile('''
         ^[ ]{3,9}[A-Z][a-z]|^[ ]{3,9}A[ ]|^[ ]{3,9}PNG
     ''')
 
