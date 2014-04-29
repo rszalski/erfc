@@ -112,6 +112,7 @@ def format_document(data):
     # Postprocess acts on a whole string
     return postprocess_paragraph(''.join(new_text))
 
+
 def write_rfc(data, number, path):
     filename = 'rfc{}.{}'.format(number, RFC_FORMAT)
     rfc_path = os.path.join(path, filename)
