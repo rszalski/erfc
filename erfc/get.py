@@ -78,26 +78,40 @@ def format_document(data):
     new_text = []
 
     lines_to_del = 0
+    last_line = None
 
     # Parser can be in states: {'par', 'enum', 'eq'}
     state = None
 
     re_toc = re.compile(r'\.{5}?[ ]+[0-9]')
     re_page = re.compile(r'\[Page [0-9]+\]')
-    re_start_of_paragraph = re.compile('''
-        ^[ ]{3,9}[A-Z][a-z]|^[ ]{3,9}A[ ]|^[ ]{3,9}PNG
-    ''')
+    re_start_of_paragraph =\
+        re.compile(r'^[ ]{3,9}[A-Z][a-z]|^[ ]{3,9}A[ ]|^[ ]{3,9}[A-Z]+')
+    re_enum = re.compile(r'^[ ]+[*o]|^[ ]+[0-9]+[)]')
 
     for line in data:
         if lines_to_del:
             lines_to_del -= 1
         elif line[0] == '\n':
             state = None
+            if last_line is not None:
+                new_text.append(last_line)
+                last_line = None
             new_text.append(line)
         elif state:
             if state == 'par':
                 line = re.sub(r'\n|\r\n|\r*', '', line)
                 new_text.append(line)
+            elif state == 'enum':
+                if re_enum.search(line):
+                    new_text.append(last_line)
+                else:
+                    if line[0] != '\n':
+                        new_text.append(re.sub(r'\n|\r\n|\r*',
+                                        '', last_line))
+                    else:
+                        new_text.append(last_line)
+                last_line = line
         elif re_toc.search(line):
             new_text.append(line)
         elif re_page.search(line):
@@ -106,6 +120,9 @@ def format_document(data):
             state = 'par'
             line = re.sub(r'\n|\r\n|\r*', '', line)
             new_text.append(line)
+        elif re_enum.search(line):
+            state = 'enum'
+            last_line = line
         else:
             new_text.append(line)
 
