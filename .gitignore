@@ -57,3 +57,8 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+# JetBrains configs
+.idea/
+
+# Vim tmp files
+*.un~

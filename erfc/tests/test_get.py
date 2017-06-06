@@ -4,7 +4,7 @@
 '''
 import pytest
 
-from erfc.get import parse_rfc_numbers
+from erfc.get import parse_rfc_numbers, postprocess_paragraph
 
 
 class TestParseRfcNumbers():
@@ -19,3 +19,32 @@ class TestParseRfcNumbers():
         rfc_numbers = [100, 101, 102, 103, 104, 105, 110, 111, 112]
 
         assert rfc_numbers == parse_rfc_numbers(arg_numbers)
+
+
+class TestPostprocessText():
+    def test_spaces(self):
+        '''
+        Given a string with redundant whitespace, removes it while preserving
+        sentence terminating symbols (?!.).
+        '''
+        pre = ('This document!    describes PNG (Portable Network Graphics),  '
+               'an   extensible file format.  for the  storage?  of raster'
+               'images.')
+        post = ('This document! describes PNG (Portable Network Graphics), '
+                'an extensible file format. for the storage? of raster'
+                'images.')
+
+        assert postprocess_paragraph(pre) == post
+
+    def test_hyphens(self):
+        '''
+        Given a string with redundant whitespace after hyphens, removes it
+        to match space before hyphen (if any).
+        '''
+        pre = 'some text -    some other text'
+        post = 'some text - some other text'
+        pre_range = '1-    2'
+        post_range = '1-2'
+
+        assert postprocess_paragraph(pre) == post
+        assert postprocess_paragraph(pre_range) == post_range
